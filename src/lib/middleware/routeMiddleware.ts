@@ -4,37 +4,49 @@ import { accessControl } from "../accessControl";
 
 const JWT_SECRET = process.env.JWT_SECRET!;
 
-export function middleware(req: NextRequest) {
+export function routeMiddleware(req: NextRequest) {
     const { pathname } = req.nextUrl;
+    const token = req.cookies.get("token")?.value;
+
+    let decoded: any = null;
+    if (token) {
+        try {
+            decoded = jwt.verify(token, JWT_SECRET);
+        } catch (err) {
+            decoded = null;
+        }
+    }
+
+    if (decoded && ["/", "/login"].includes(pathname)) {
+        return NextResponse.redirect(new URL("/dashboard", req.url));
+    }
+    if (!decoded && ["/", "/login"].includes(pathname)) {
+        return NextResponse.next();
+    }
 
     const matchedPath = Object.keys(accessControl).find((route) =>
         pathname.startsWith(route)
     );
 
-    if (!matchedPath) {
-        return NextResponse.next();
-    }
-
-    const token = req.cookies.get("token")?.value;
-
-    if (!token) {
-        return NextResponse.redirect(new URL("/unauthorized", req.url));
-    }
-
-    try {
-        const decoded: any = jwt.verify(token, JWT_SECRET);
-        const allowedRoles = accessControl[matchedPath];
-
-        if (!allowedRoles.includes(decoded.role)) {
+    if (matchedPath) {
+        if (!decoded) {
             return NextResponse.redirect(new URL("/unauthorized", req.url));
         }
 
-        return NextResponse.next();
-    } catch (err) {
-        return NextResponse.redirect(new URL("/unauthorized", req.url));
+        const allowedRoles = accessControl[matchedPath];
+        if (!allowedRoles.includes(decoded.role)) {
+            return NextResponse.redirect(new URL("/unauthorized", req.url));
+        }
     }
-};
+
+    return NextResponse.next();
+}
 
 export const config = {
-    matcher: ["/dashboard/:path*", "/projects/:path*", "/crm/:path*"],
+    matcher: [
+        "/",
+        "/login",
+        "/register",
+        "/dashboard/:path*",
+    ],
 };
