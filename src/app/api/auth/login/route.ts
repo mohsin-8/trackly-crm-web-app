@@ -14,12 +14,12 @@ export const POST = async (req: NextRequest) => {
     if (!isValid) return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
 
     const token = jwt.sign(
-        { id: user._id, role: user.role },
+        { id: user._id, isAdmin: user.isAdmin },
         process.env.JWT_SECRET!,
         { expiresIn: "1h" }
     );
 
-    const res = NextResponse.json({ message: "Login successful", role: user.role });
+    const res = NextResponse.json({ message: "Login successful", isAdmin: user.isAdmin });
 
     res.cookies.set("token", token, {
         httpOnly: true,

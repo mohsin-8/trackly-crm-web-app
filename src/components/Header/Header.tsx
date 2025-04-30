@@ -1,14 +1,20 @@
 "use client";
 import React from 'react';
-import { Box, Button, Flex, HStack, Image, Text } from '@chakra-ui/react';
+import { Box, Flex, HStack, Image, Text, Button, Menu, Portal } from '@chakra-ui/react';
 import { IoNotificationsOutline, IoChevronDown } from "react-icons/io5";
 import userImage from "../../assets/images/user-image.jpg";
 import Link from 'next/link';
 import LogoIcon from "../../assets/images/logo-icon.png";
-import { useUser } from '@/hooks/useUser';
+import { useRouter } from 'next/navigation';
+import axios from "@/lib/axios";
 
 const Header = () => {
-    const { user } = useUser();
+    const router = useRouter();
+
+    const handleLogout = async () => {
+        const res = await axios.post("/api/auth/logout");
+        router.push("/");
+    };
 
     return (
         <HStack justifyContent={"space-between"} bgColor={"#5D3FD3"} borderBottom={"1px solid #fff"} boxShadow="rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px" p={"12px 25px"}>
@@ -43,8 +49,25 @@ const Header = () => {
 
                 <Box>
                     <Flex gap={2} cursor={"pointer"}>
-                        <Image src={userImage.src} alt='userImage' />
-                        <Text display={"flex"} color={"#fff"} gap={"0.5px"} alignItems={"center"}>{user?.sudo_name} <IoChevronDown /></Text>
+                        <Menu.Root>
+                            <Menu.Trigger asChild>
+                                <Button size="sm" bgColor={"transparent"} outline={"none"}>
+                                    <Image src={userImage.src} alt='userImage' /> <IoChevronDown />
+                                </Button>
+                            </Menu.Trigger>
+                            <Portal>
+                                <Menu.Positioner>
+                                    <Menu.Content p="10px">
+                                        <Menu.Item value="Profile Settings" cursor={"pointer"} p="5px" mb="5px" onSelect={() => router.push("/profile-settings")}>
+                                            Profile Settings
+                                        </Menu.Item>
+                                        <Menu.Item p="5px" cursor={"pointer"} value="Log Out" onClick={handleLogout}>
+                                            Log Out
+                                        </Menu.Item>
+                                    </Menu.Content>
+                                </Menu.Positioner>
+                            </Portal>
+                        </Menu.Root>
                     </Flex>
                 </Box>
             </Flex >

@@ -8,7 +8,6 @@ const JWT_SECRET = process.env.JWT_SECRET!;
 export const GET = async (req: NextRequest) => {
     await connectDB();
 
-    // Get the token from cookies
     const token = req.cookies.get("token")?.value;
 
     if (!token) {

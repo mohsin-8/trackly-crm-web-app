@@ -4,8 +4,8 @@ import { User } from "@/lib/models/User/User";
 import bcrypt from "bcryptjs";
 import { IUser } from "@/lib/types/user";
 
-function validateUserInput({ email, password, name, sudo_name }: IUser) {
-    if (!email || !password || !name || !sudo_name) {
+function validateUserInput({ email, password, name, sudo_name, isAdmin }: IUser) {
+    if (!email || !password || !name || !sudo_name || !isAdmin) {
         return "All fields are required";
     }
     if (password.length < 6) {
@@ -18,9 +18,9 @@ export const POST = async (req: NextRequest) => {
     await connectDB();
 
     try {
-        const { email, password, name, sudo_name, role } = await req.json();
+        const { email, password, name, sudo_name, isAdmin } = await req.json();
 
-        const error = validateUserInput({ email, password, name, sudo_name });
+        const error = validateUserInput({ email, password, name, sudo_name, isAdmin });
         if (error) {
             return NextResponse.json({ error }, { status: 400 });
         }
@@ -33,21 +33,21 @@ export const POST = async (req: NextRequest) => {
         const hashedPassword = await bcrypt.hash(password, 10);
 
         const newUser = await User.create({
+            isAdmin,
             email,
             password: hashedPassword,
             name,
             sudo_name,
-            role: role || "support",
         });
 
         return NextResponse.json(
             {
                 message: "User registered successfully",
                 user: {
+                    isAdmin: newUser.isAdmin,
                     id: newUser._id,
                     sudo_name: newUser.sudo_name,
                     email: newUser.email,
-                    role: newUser.role,
                 },
             },
             { status: 201 }
