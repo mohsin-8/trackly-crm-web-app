@@ -9,8 +9,17 @@ import { GoProjectRoadmap } from "react-icons/go";
 import { IoCreateOutline, IoPersonSharp } from "react-icons/io5"
 import { PiMicrosoftTeamsLogo, PiKanbanLight } from "react-icons/pi";
 import { FaUsers } from "react-icons/fa6";
+import axios from "@/lib/axios";
+import { useRouter } from 'next/navigation';
 
 const Sidebar = () => {
+    const router = useRouter();
+
+    const handleLogout = async () => {
+        const res = await axios.post("/api/auth/logout");
+        router.push("/");
+    };
+
     return (
         <Box as="nav" w="270px" h="100vh" bg="#5D3FD3" boxShadow="rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px">
             <VStack display="block" gap="4" align="start">
@@ -83,6 +92,7 @@ const Sidebar = () => {
                                     outline={"none"}
                                     p={"unset"}
                                     fontWeight={400}
+                                    onClick={handleLogout}
                                 >
                                     <IoIosLogOut size={20} /> Log out
                                 </Button>

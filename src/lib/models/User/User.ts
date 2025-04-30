@@ -11,7 +11,9 @@ const UserSchema: Schema<IUserDocument> = new Schema({
     password: { type: String, required: true },
     name: { type: String, required: true },
     sudo_name: { type: String, required: true },
-    role: { type: String, enum: ["admin", "sales", "support"], default: "user" }
+    role: { type: String, enum: ["admin", "sales", "support"], default: "user" },
+    resetPasswordToken: String,
+    resetPasswordExpire: Date
 }, { timestamps: true });
 
 UserSchema.methods.comparePassword = async function (candidate: string): Promise<boolean> {

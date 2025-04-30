@@ -1,3 +1,4 @@
+"use client";
 import React from 'react';
 import { Link as ChakraLink, Box, Grid, GridItem, HStack, Image, Text } from '@chakra-ui/react';
 import GoToLoginPageImage from "@/assets/images/login.jpg";
