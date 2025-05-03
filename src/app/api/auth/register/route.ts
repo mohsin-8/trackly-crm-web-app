@@ -4,8 +4,8 @@ import { User } from "@/lib/models/User/User";
 import bcrypt from "bcryptjs";
 import { IUser } from "@/lib/types/user";
 
-function validateUserInput({ email, password, name, sudo_name, isAdmin }: IUser) {
-    if (!email || !password || !name || !sudo_name || !isAdmin) {
+function validateUserInput({ email, password, name, sudo_name }: IUser) {
+    if (!email || !password || !name || !sudo_name) {
         return "All fields are required";
     }
     if (password.length < 6) {
@@ -20,7 +20,7 @@ export const POST = async (req: NextRequest) => {
     try {
         const { email, password, name, sudo_name, isAdmin } = await req.json();
 
-        const error = validateUserInput({ email, password, name, sudo_name, isAdmin });
+        const error = validateUserInput({ email, password, name, sudo_name });
         if (error) {
             return NextResponse.json({ error }, { status: 400 });
         }

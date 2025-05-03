@@ -1,8 +1,8 @@
 import mongoose, { Schema, Model } from "mongoose";
-import { roles } from "@/lib/types/roles";
+import { Role } from "@/lib/types/roles";
 
-const RolesSchema: Schema<roles> = new Schema({
+const RolesSchema: Schema<Role> = new Schema({
     name: { type: String, required: true, unique: true }
 }, { timestamps: true });
 
-export const Roles: Model<roles> = mongoose.models.Role || mongoose.model("Role", RolesSchema);
+export const Roles: Model<Role> = mongoose.models.Role || mongoose.model("Role", RolesSchema);

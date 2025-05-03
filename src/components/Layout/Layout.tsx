@@ -9,7 +9,7 @@ const Layout = ({ children }: Readonly<{ children: React.ReactNode; }>) => {
             <Header />
             <Flex>
                 <Sidebar />
-                <Box p="4" minH="100vh" w="calc(100% - 250px)">
+                <Box p="4" minH="100vh" w="100%">
                     {children}
                 </Box>
             </Flex>

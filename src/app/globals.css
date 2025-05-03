@@ -4,6 +4,26 @@
   box-sizing: border-box;
 }
 
+:root {
+  --theme-color: #5d3fd3;
+  --box-shadowMain: rgb(50 50 93 / 25%) 0px 2px 5px -1px, rgb(0 0 0 / 30%) 0px 1px 3px -1px;
+}
+
 body {
   font-family: var(--font-poppins);
+  overflow: hidden;
+  height: 100vh;
+  background-color: #5d3fd321;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #5d3fd33d;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #5d3fd3;
 }

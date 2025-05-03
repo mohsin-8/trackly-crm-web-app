@@ -17,7 +17,7 @@ const Header = () => {
     };
 
     return (
-        <HStack justifyContent={"space-between"} bgColor={"#5D3FD3"} borderBottom={"1px solid #fff"} boxShadow="rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px" p={"12px 25px"}>
+        <HStack justifyContent={"space-between"} bgColor={"var(--theme-color)"} borderBottom={"1px solid #fff"} boxShadow="rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px" p={"12px 25px"}>
             <Flex alignItems={"center"} gap={6}>
                 <Link href="/dashboard" style={{ display: "flex", alignItems: "center", gap: "6px" }}>
                     <Image src={LogoIcon.src} alt='logo-icon' />

@@ -7,7 +7,7 @@ export interface IUserDocument extends IUser, Document {
 };
 
 const UserSchema: Schema<IUserDocument> = new Schema({
-    isAdmin: { type: Boolean },
+    isAdmin: { type: Boolean, default: false },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     name: { type: String, required: true },
