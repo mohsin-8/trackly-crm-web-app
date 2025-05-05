@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
 import { ProviderChakra } from "@/components/ui/provider";
+import ReactQueryProviders from "../lib/react-query";
 
 const poppinsSans = Poppins({
   variable: "--font-poppins",
@@ -20,12 +21,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ProviderChakra>
-      <html lang="en">
-        <body className={`${poppinsSans.variable}`}>
-          {children}
-        </body>
-      </html>
-    </ProviderChakra>
+    <ReactQueryProviders>
+      <ProviderChakra>
+        <html lang="en">
+          <body className={`${poppinsSans.variable}`}>
+            {children}
+          </body>
+        </html>
+      </ProviderChakra>
+    </ReactQueryProviders>
   );
-}
+};
