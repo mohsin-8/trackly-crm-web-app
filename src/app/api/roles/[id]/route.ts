@@ -17,3 +17,19 @@ export const DELETE = async (req: NextRequest, { params }: { params: { id: strin
         return NextResponse.json({ message: "Server error" }, { status: 500 });
     }
 };
+
+export const GET = async (req: NextRequest, { params }: { params: { id: string } }) => {
+    await connectDB();
+    try {
+        const { id } = await params;
+
+        const getRoleById = await Roles.findById(id);
+        if (!getRoleById) {
+            return NextResponse.json({ message: "Role not found" }, { status: 401 });
+        }
+
+        return NextResponse.json(getRoleById);
+    } catch (error) {
+        return NextResponse.json({ message: "Server error" }, { status: 500 });
+    }
+};

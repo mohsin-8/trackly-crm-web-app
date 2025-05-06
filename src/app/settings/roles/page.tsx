@@ -1,35 +1,40 @@
 "use client";
-import React, { useState } from 'react';
+import React from 'react';
 import { Box, Checkbox, Flex, HStack, Link, Text } from '@chakra-ui/react';
-import { toaster } from "@/components/ui/toaster";
+import { Toaster, toaster } from "@/components/ui/toaster"
 import Layout from '@/components/Layout/Layout';
 import NextLink from "next/link";
 import { FaEdit, FaFingerprint, FaPlus, FaUserTag } from 'react-icons/fa';
 import { MdDelete } from "react-icons/md";
-import { useQuery, useMutation, useQueryClient, QueryClient } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { getRoles, deleteRole } from '@/lib/services/rolesApiCalls';
 import { Role } from '@/lib/types/roles';
+import { useRouter } from 'next/navigation';
 
 const Roles = () => {
     const queryClient = useQueryClient();
+    const router = useRouter();
 
-    const { data: roles, isLoading, error } = useQuery<Role[]>({
+    const { data: roles, isLoading } = useQuery<Role[]>({
         queryKey: ['roles'],
         queryFn: getRoles,
     });
 
-    const { mutate: handleRoleDelete, isPending } = useMutation({
+    const { mutate: handleRoleDelete } = useMutation({
         mutationFn: deleteRole,
         onSuccess: () => {
-            toaster.success({
-                title: "Role deleted",
-                description: "The role has been successfully deleted.",
+            toaster.create({
+                title: "Role is deleted successfully",
                 duration: 3000,
-                closable: true
+                type: "success",
             });
             queryClient.invalidateQueries({ queryKey: ['roles'] });
         },
     });
+
+    const handleEditRole = (id: string) => {
+        router.push(`/settings/roles/edit/${id}`);
+    };
 
     return (
         <Layout>
@@ -86,13 +91,14 @@ const Roles = () => {
                                         cursor="pointer"
                                         onClick={() => handleRoleDelete(role._id)}
                                     />
-                                    <FaEdit size={22} color="var(--theme-color)" cursor="pointer" />
+                                    <FaEdit size={22} color="var(--theme-color)" cursor="pointer" onClick={() => handleEditRole(role._id)} />
                                 </Flex>
                             </Flex>
                         </HStack>
                     </Box>
                 ))
             )}
+            <Toaster />
         </Layout>
     )
 }

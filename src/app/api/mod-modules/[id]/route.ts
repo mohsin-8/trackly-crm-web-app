@@ -36,3 +36,21 @@ export const DELETE = async (req: NextRequest, { params }: { params: { id: strin
         return NextResponse.json({ message: "Server error" }, { status: 500 });
     }
 };
+
+export const UPDATE = async (req: NextRequest, { params }: { params: { id: string } }) => {
+    await connectDB();
+
+    try {
+        const { id } = await params;
+
+        const updateModuleById = await ModModule.findByIdAndUpdate(id);
+
+        if (!updateModuleById) {
+            return NextResponse.json({ message: "Module not found" }, { status: 404 });
+        }
+
+        return NextResponse.json({ message: "Module is updated successfully" });
+    } catch (error) {
+        return NextResponse.json({ message: "Server error" }, { status: 500 });
+    }
+};

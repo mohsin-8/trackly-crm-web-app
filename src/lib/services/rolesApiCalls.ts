@@ -6,6 +6,15 @@ export const getRoles = async (): Promise<Role[]> => {
     return res.data;
 };
 
+export const getRolesById = async (id: string | null) => {
+    const res = await axios.get(`/api/roles/${id}`);
+    return res.data;
+};
+
 export const deleteRole = async (id: string) => {
     await axios.delete(`/api/roles/${id}`);
+};
+
+export const updateRole = async (id: string) => {
+    await axios.put(`/api/roles/${id}`);
 };
