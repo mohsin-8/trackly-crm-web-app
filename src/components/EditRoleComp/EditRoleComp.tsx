@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import { Box, Button, Flex, Input, Text, Field } from '@chakra-ui/react';
+import { Box, Button, Flex, Input, Text, Field, Spinner } from '@chakra-ui/react';
 import { MdOutlineDoubleArrow } from 'react-icons/md';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Role } from '@/lib/types/roles';
@@ -13,7 +13,7 @@ const EditRoleComp = ({ id }: { id?: string | null }) => {
     const queryClient = useQueryClient();
     const router = useRouter();
 
-    const { data: roles } = useQuery<Role>({
+    const { data: roles, isLoading } = useQuery<Role>({
         queryKey: ['roles', id],
         enabled: !!id,
         queryFn: () => getRolesById(id as string),
@@ -69,30 +69,38 @@ const EditRoleComp = ({ id }: { id?: string | null }) => {
             <Box p={"10px 15px"} bgColor="var(--theme-color)">
                 <Text as={"h3"} fontSize={"20px"} fontWeight={"500"} color={"#fff"}>{id ? "Edit Role" : "Create Role"}</Text>
             </Box>
-            <Box p={"20px"}>
-                <form onSubmit={handleSubmit}>
-                    <Field.Root>
-                        <Field.Label>Role Name *</Field.Label>
-                        <Input
-                            placeholder="Enter your Role Name *"
-                            type='text'
-                            outline={"none"}
-                            w={"50%"}
-                            p="10px"
-                            h="40px"
-                            border={"1px solid var(--theme-color)"}
-                            value={roleName}
-                            onChange={(e) => setRoleName(e.target.value)}
-                        />
-                    </Field.Root>
-
-                    <Flex justifyContent={"flex-end"} mt={4}>
-                        <Button type='submit' color={"#fff"} p="10px 15px" bgColor={"var(--theme-color)"}>
-                            {id ? "Edit Role" : "Create Role"} <MdOutlineDoubleArrow size={20} color='#fff' />
-                        </Button>
+            {isLoading ? (
+                id ? (
+                    <Flex justifyContent={"center"}>
+                        <Spinner size='lg' color="var(--theme-color)" />
                     </Flex>
-                </form>
-            </Box>
+                ) : null
+            ) :
+                <Box p={"20px"}>
+                    <form onSubmit={handleSubmit}>
+                        <Field.Root>
+                            <Field.Label>Role Name *</Field.Label>
+                            <Input
+                                placeholder="Enter your Role Name *"
+                                type='text'
+                                outline={"none"}
+                                w={"50%"}
+                                p="10px"
+                                h="40px"
+                                border={"1px solid var(--theme-color)"}
+                                value={roleName}
+                                onChange={(e) => setRoleName(e.target.value)}
+                            />
+                        </Field.Root>
+
+                        <Flex justifyContent={"flex-end"} mt={4}>
+                            <Button type='submit' color={"#fff"} p="10px 15px" bgColor={"var(--theme-color)"}>
+                                {id ? "Edit Role" : "Create Role"} <MdOutlineDoubleArrow size={20} color='#fff' />
+                            </Button>
+                        </Flex>
+                    </form>
+                </Box>
+            }
         </Box>
     );
 };

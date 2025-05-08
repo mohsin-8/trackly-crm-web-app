@@ -2,7 +2,7 @@
 import React from 'react';
 import NextLink from "next/link";
 import Layout from '@/components/Layout/Layout';
-import { Box, Checkbox, Flex, HStack, Link, Text } from '@chakra-ui/react';
+import { Box, Checkbox, Flex, HStack, Link, Spinner, Text } from '@chakra-ui/react';
 import { FaEdit, FaFingerprint, FaPlus } from 'react-icons/fa';
 import { GoFileSubmodule } from "react-icons/go";
 import { MdDelete } from 'react-icons/md';
@@ -56,7 +56,7 @@ const Modules = () => {
                 </HStack>
             </Box>
             {isLoading ? (
-                <Text mt="20px">Loading modules...</Text>
+                <Flex justifyContent={"center"} mt="20px"><Spinner size='lg' color="var(--theme-color)" /></Flex>
             ) : (
                 modules?.map((module, index) => {
                     return (

@@ -1,6 +1,6 @@
 "use client";
 import React from 'react';
-import { Box, Checkbox, Flex, HStack, Link, Text } from '@chakra-ui/react';
+import { Box, Checkbox, Flex, HStack, Link, Spinner, Text } from '@chakra-ui/react';
 import { Toaster, toaster } from "@/components/ui/toaster"
 import Layout from '@/components/Layout/Layout';
 import NextLink from "next/link";
@@ -55,7 +55,7 @@ const Roles = () => {
                 </HStack>
             </Box>
             {isLoading ? (
-                <Text mt="20px">Loading roles...</Text>
+                <Flex justifyContent={"center"} mt="20px"><Spinner size='lg' color="var(--theme-color)" /></Flex>
             ) : (
                 roles?.map((role, index) => (
                     <Box

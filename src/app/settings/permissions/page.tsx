@@ -2,14 +2,14 @@
 import React from 'react';
 import NextLink from "next/link";
 import Layout from '@/components/Layout/Layout';
-import { Box, Checkbox, Flex, HStack, Link, Text } from '@chakra-ui/react';
+import { Box, Checkbox, Flex, HStack, Link, Spinner, Text } from '@chakra-ui/react';
 import { FaEdit, FaFingerprint, FaPlus, FaUserShield } from 'react-icons/fa';
 import { MdDelete } from 'react-icons/md';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { toaster } from '@/components/ui/toaster';
 import { permissions } from '@/lib/types/permissions';
-import { getAllPermissions } from '@/lib/services/permissionApiCalls';
+import { deletePermission, getAllPermissions } from '@/lib/services/permissionApiCalls';
 
 const Permissions = () => {
   const queryClient = useQueryClient();
@@ -19,21 +19,21 @@ const Permissions = () => {
     queryKey: ['permissions'],
     queryFn: getAllPermissions,
   });
-  console.log(permission);
-  // const { mutate: handleModuleDelete } = useMutation({
-  //   mutationFn: deleteModule,
-  //   onSuccess: () => {
-  //     toaster.create({
-  //       title: "Role is deleted successfully",
-  //       duration: 3000,
-  //       type: "success",
-  //     });
-  //     queryClient.invalidateQueries({ queryKey: ['modules'] });
-  //   },
-  // });
 
-  const handleEditModule = (id: string) => {
-    router.push(`/settings/modules/edit/${id}`);
+  const { mutate: handleModuleDelete } = useMutation({
+    mutationFn: deletePermission,
+    onSuccess: () => {
+      toaster.create({
+        title: "Permission is deleted successfully",
+        duration: 3000,
+        type: "success",
+      });
+      queryClient.invalidateQueries({ queryKey: ['permissions'] });
+    },
+  });
+
+  const handleEditPermission = (id: string) => {
+    router.push(`/settings/permissions/edit/${id}`);
   };
 
   return (
@@ -55,7 +55,7 @@ const Permissions = () => {
         </HStack>
       </Box>
       {isLoading ? (
-        <Text mt="20px">Loading permissions...</Text>
+        <Flex justifyContent={"center"} mt="20px"><Spinner size='lg' color="var(--theme-color)" /></Flex>
       ) : (
         permission?.map((data, index) => {
           return (
@@ -84,8 +84,8 @@ const Permissions = () => {
                     </Text>
                   </Box>
                   <Flex gap="10px" alignItems="center">
-                    <FaEdit size={22} color="var(--theme-color)" cursor="pointer" />
-                    <MdDelete size={22} color="red" cursor="pointer" />
+                    <FaEdit size={22} color="var(--theme-color)" cursor="pointer" onClick={() => handleEditPermission(data?._id)} />
+                    <MdDelete size={22} color="red" cursor="pointer" onClick={() => handleModuleDelete(data?._id)} />
                   </Flex>
                 </Flex>
               </HStack>
