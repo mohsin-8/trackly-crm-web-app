@@ -50,7 +50,7 @@ const Roles = () => {
                             <Checkbox.Control />
                             <Checkbox.Label>Select All</Checkbox.Label>
                         </Checkbox.Root>
-                        <Link href='#' bgColor={"var(--theme-color)"} textDecor={"none"} color={"#fff"} p="10px" borderRadius={"8px"} as={NextLink}><FaPlus color='#fff' /> Create Role</Link>
+                        <Link href='/settings/roles/create' bgColor={"var(--theme-color)"} textDecor={"none"} color={"#fff"} p="10px" borderRadius={"8px"} as={NextLink}><FaPlus color='#fff' /> Create Role</Link>
                     </Flex>
                 </HStack>
             </Box>
@@ -79,19 +79,11 @@ const Roles = () => {
                             <Flex justifyContent="space-between" w="100%">
                                 <Box display="flex" gap="10px" alignItems="center">
                                     <FaUserTag size={24} color="var(--theme-color)" />
-                                    <Text fontSize="14px" fontWeight={500} color="#000">
-                                        {" "}
-                                        {role?.name}
-                                    </Text>
+                                    <Text fontSize="14px" fontWeight={500} color="#000">{role?.name}</Text>
                                 </Box>
                                 <Flex gap="10px" alignItems="center">
-                                    <MdDelete
-                                        size={22}
-                                        color="red"
-                                        cursor="pointer"
-                                        onClick={() => handleRoleDelete(role._id)}
-                                    />
                                     <FaEdit size={22} color="var(--theme-color)" cursor="pointer" onClick={() => handleEditRole(role._id)} />
+                                    <MdDelete size={22} color="red" cursor="pointer" onClick={() => handleRoleDelete(role._id)} />
                                 </Flex>
                             </Flex>
                         </HStack>

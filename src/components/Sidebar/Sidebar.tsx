@@ -757,6 +757,12 @@ const Sidebar = () => {
                 <Box mb="20px" w="100%" display={sideBarName == 'settings' ? "block" : "none"}>
                     <Text as={"h2"} mb={"25px"} display={"flex"} gap={"10px"} p={"10px 20px 0px"} alignItems={"center"} fontSize={"18px"} fontWeight={600} color={"#fff"}><AiFillDashboard color='#fff' size={24} /> Settings</Text>
                     <List.Root listStyleType={"none"}>
+                        <List.Item>
+                            <Link as={NextLink} color="#fff" textDecor={"none"} mb={"10px"} p={"10px 20px"} w={"100%"} outline={"none"} borderRadius={"10px"} transition={"all ease 0.3s"} _hover={{ bgColor: "#3c2b7f" }} href='/settings/modules'>Modules</Link>
+                        </List.Item>
+                        <List.Item>
+                            <Link as={NextLink} color="#fff" textDecor={"none"} mb={"10px"} p={"10px 20px"} w={"100%"} outline={"none"} borderRadius={"10px"} transition={"all ease 0.3s"} _hover={{ bgColor: "#3c2b7f" }} href='/settings/permissions'>Permissions</Link>
+                        </List.Item>
                         <Accordion.Root collapsible>
                             {items.map((item, index) => (
                                 <Accordion.Item key={index} value={item.value} border="unset">
@@ -788,7 +794,6 @@ const Sidebar = () => {
                                 </Accordion.Item>
                             ))}
                         </Accordion.Root>
-
                     </List.Root>
                 </Box>
                 <Box mb="20px" w="100%" display={sideBarName == 'knowledge-base' ? "block" : "none"}>

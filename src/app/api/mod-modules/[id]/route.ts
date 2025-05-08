@@ -37,13 +37,16 @@ export const DELETE = async (req: NextRequest, { params }: { params: { id: strin
     }
 };
 
-export const UPDATE = async (req: NextRequest, { params }: { params: { id: string } }) => {
+export const PUT = async (req: NextRequest, { params }: { params: { id: string } }) => {
     await connectDB();
 
     try {
         const { id } = await params;
+        const { name } = await req.json();
 
-        const updateModuleById = await ModModule.findByIdAndUpdate(id);
+        if (!name) return NextResponse.json({ message: "module name is required" }, { status: 400 });
+
+        const updateModuleById = await ModModule.findByIdAndUpdate(id, { name }, { new: true });
 
         if (!updateModuleById) {
             return NextResponse.json({ message: "Module not found" }, { status: 404 });

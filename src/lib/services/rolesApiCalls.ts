@@ -15,6 +15,10 @@ export const deleteRole = async (id: string) => {
     await axios.delete(`/api/roles/${id}`);
 };
 
-export const updateRole = async (id: string) => {
-    await axios.put(`/api/roles/${id}`);
+export const updateRole = async (id: string, name: string) => {
+    await axios.put(`/api/roles/${id}`, { name });
+};
+
+export const createRole = async (name: string) => {
+    await axios.post(`/api/roles`, {name});
 };

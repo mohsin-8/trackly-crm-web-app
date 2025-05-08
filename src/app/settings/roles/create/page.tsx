@@ -2,13 +2,12 @@ import React from 'react';
 import Layout from '@/components/Layout/Layout';
 import EditRoleComp from '@/components/EditRoleComp/EditRoleComp';
 
-const RolesEdit = async ({ params }: { params: { id: string } }) => {
-    const { id } = await params;
+const RolesCreate = async () => {
     return (
         <Layout>
-            <EditRoleComp id={id} />
+            <EditRoleComp />
         </Layout>
     )
 }
 
-export default RolesEdit;
+export default RolesCreate;

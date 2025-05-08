@@ -20,3 +20,14 @@ export const POST = async (req: NextRequest) => {
         return NextResponse.json({ message: "Server error" }, { status: 500 });
     }
 };
+
+export const GET = async (req: NextRequest) => {
+    await connectDB();
+    try {
+        const allPermissions = await Permissions.find();
+
+        return NextResponse.json(allPermissions);
+    } catch (error) {
+        return NextResponse.json({ message: "Server error" }, { status: 500 });
+    }
+};
