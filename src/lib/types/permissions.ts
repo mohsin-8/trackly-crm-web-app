@@ -6,3 +6,9 @@ export interface permissions {
     name: string;
     description: string;
 };
+
+export interface receivePermissionData {
+    name: string;
+    description: string;
+    module_id: Object | string;
+};
