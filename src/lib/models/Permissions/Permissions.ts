@@ -1,10 +1,15 @@
-import mongoose, { Schema, Model } from "mongoose";
-import { permissions } from "@/lib/types/permissions";
+import mongoose, { Schema, Model, Types } from "mongoose";
 
-const PermissionsSchema: Schema<permissions> = new Schema({
+export interface PermissionDocument extends Document {
+    module_id: Types.ObjectId;
+    description: string;
+};
+
+const PermissionsSchema = new Schema<PermissionDocument>({
     module_id: { type: mongoose.Schema.Types.ObjectId, ref: "Module", required: true },
-    name: { type: String, required: true, unique: true },
     description: { type: String, required: true }
 }, { timestamps: true });
 
-export const Permissions: Model<permissions> = mongoose.models.Permission || mongoose.model("Permission", PermissionsSchema);
+delete mongoose.models.Permission;
+
+export const Permissions: Model<PermissionDocument> = mongoose.models.Permission || mongoose.model<PermissionDocument>("Permission", PermissionsSchema);

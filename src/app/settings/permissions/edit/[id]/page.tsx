@@ -2,7 +2,7 @@ import React from 'react';
 import Layout from '@/components/Layout/Layout';
 import EditPermissionComp from '@/components/EditPermissionComp/EditPermissionComp';
 
-const EditPermissionPage = async ({ params }: { params: { id: string } }) => {
+const PermissionEdit = async ({ params }: { params: { id: string } }) => {
     const { id } = await params;
     return (
         <Layout>
@@ -11,4 +11,4 @@ const EditPermissionPage = async ({ params }: { params: { id: string } }) => {
     )
 }
 
-export default EditPermissionPage;
+export default PermissionEdit;

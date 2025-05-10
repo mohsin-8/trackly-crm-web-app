@@ -1,14 +1,7 @@
-import mongoose from "mongoose";
+import { mod_modules } from "./mod_modules";
 
-export interface permissions {
+export interface Permission {
     _id: string;
-    module_id: mongoose.Schema.Types.ObjectId | string;
-    name: string;
+    module_id: string | mod_modules;
     description: string;
-};
-
-export interface receivePermissionData {
-    name: string;
-    description: string;
-    module_id: Object | string;
 };
