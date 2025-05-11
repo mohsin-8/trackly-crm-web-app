@@ -1,7 +1,7 @@
 "use client";
 import React from 'react';
 import NextLink from "next/link";
-import { Box, Checkbox, Flex, HStack, Link, Spinner, Text } from '@chakra-ui/react';
+import { Box, Checkbox, Flex, HStack, Link, Spinner, Table, Text } from '@chakra-ui/react';
 import { FaEdit, FaFingerprint, FaPlus } from 'react-icons/fa';
 import Layout from '@/components/Layout/Layout';
 import { GoFileSubmodule } from 'react-icons/go';
@@ -42,7 +42,34 @@ const Permissions = () => {
           </Flex>
         </HStack>
       </Box>
-      {permission?.map((data, index) => {
+      <Table.Root mt="15px" boxShadow="var(--box-shadowMain)" size="lg" borderRadius={"10px"} overflow={"hidden"}>
+        <Table.Header>
+          <Table.Row bgColor={"var(--theme-color)"}>
+            <Table.ColumnHeader p={"15px"} color={"#fff"}>No#</Table.ColumnHeader>
+            <Table.ColumnHeader p={"15px"} color={"#fff"}>Permissions</Table.ColumnHeader>
+            <Table.ColumnHeader p={"15px"} color={"#fff"}>Modules</Table.ColumnHeader>
+            <Table.ColumnHeader p={"15px"} color={"#fff"}>Actions</Table.ColumnHeader>
+          </Table.Row>
+        </Table.Header>
+        {permission?.map((data, index) => {
+          return (
+            <Table.Body key={index}>
+              <Table.Row>
+                <Table.Cell p={"15px"}>{index + 1}</Table.Cell>
+                <Table.Cell p={"15px"}>{data?.description}</Table.Cell>
+                <Table.Cell p={"15px"}>{typeof data.module_id === "object" ? data.module_id.name : "-"}</Table.Cell>
+                <Table.Cell p={"15px"}>
+                  <Flex gap="10px" alignItems="center">
+                    <FaEdit size={22} color="var(--theme-color)" cursor="pointer" onClick={() => handleEditPermission(data?._id)} />
+                    <MdDelete size={22} color="red" cursor="pointer" />
+                  </Flex>
+                </Table.Cell>
+              </Table.Row>
+            </Table.Body>
+          )
+        })}
+      </Table.Root>
+      {/* {permission?.map((data, index) => {
         return (
           <Box key={index} p="15px" mt="15px" boxShadow="var(--box-shadowMain)" bgColor="#fff" borderRadius="10px">
             <HStack alignItems="center">
@@ -71,14 +98,14 @@ const Permissions = () => {
                   </Box>
                 </Flex>
                 <Flex gap="10px" alignItems="center">
-                  <FaEdit size={22} color="var(--theme-color)" cursor="pointer" />
+                  <FaEdit size={22} color="var(--theme-color)" cursor="pointer" onClick={() => handleEditPermission(data?._id)} />
                   <MdDelete size={22} color="red" cursor="pointer" />
                 </Flex>
               </Flex>
             </HStack>
           </Box>
         )
-      })}
+      })} */}
     </Layout>
   )
 }

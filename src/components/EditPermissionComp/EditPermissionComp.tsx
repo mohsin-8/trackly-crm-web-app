@@ -1,9 +1,9 @@
-import React from 'react'
+import React from 'react';
 
-const EditPermissionComp = ({ id }: { id?: string | null}) => {
+const EditPermissionComp = ({ id }: { id?: string | null }) => {
     return (
-        <div>{id}</div>
+        <>{id}</>
     )
 }
 
-export default EditPermissionComp
+export default EditPermissionComp;

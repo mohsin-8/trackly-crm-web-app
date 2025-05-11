@@ -7,7 +7,9 @@ export interface PermissionDocument extends Document {
 
 const PermissionsSchema = new Schema<PermissionDocument>({
     module_id: { type: mongoose.Schema.Types.ObjectId, ref: "Module", required: true },
-    description: { type: String, required: true }
+    description: {
+        type: String, required: true, unique: true, trim: true
+    }
 }, { timestamps: true });
 
 delete mongoose.models.Permission;
