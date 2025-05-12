@@ -2,28 +2,23 @@
 import React from 'react';
 import NextLink from "next/link";
 import { Box, Checkbox, Flex, HStack, Link, Spinner, Table, Text } from '@chakra-ui/react';
-import { FaEdit, FaFingerprint, FaPlus } from 'react-icons/fa';
+import { FaFingerprint, FaPlus } from 'react-icons/fa';
 import Layout from '@/components/Layout/Layout';
-import { GoFileSubmodule } from 'react-icons/go';
 import { MdDelete } from 'react-icons/md';
-import { useRouter } from 'next/navigation';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { Permission } from '@/lib/types/permissions';
 import { getPermissions } from '@/lib/services/permissionsApiCalls';
 
 const Permissions = () => {
+  if (typeof window === 'undefined') return null;
+
   const queryClient = useQueryClient();
-  const router = useRouter();
 
   const { data: permission, isLoading } = useQuery<Permission[]>({
     queryKey: ['permissions'],
     queryFn: getPermissions,
   });
 
-  const handleEditPermission = (id: string) => {
-    router.push(`/settings/permissions/edit/${id}`);
-  };
-  console.log(permission);
   return (
     <Layout>
       <Box boxShadow={"var(--box-shadowMain)"} bgColor={"#fff"} borderRadius={"10px"}>
@@ -51,61 +46,51 @@ const Permissions = () => {
             <Table.ColumnHeader p={"15px"} color={"#fff"}>Actions</Table.ColumnHeader>
           </Table.Row>
         </Table.Header>
-        {permission?.map((data, index) => {
-          return (
-            <Table.Body key={index}>
-              <Table.Row>
+
+        {/* Correct the structure here */}
+        <Table.Body>
+          {isLoading ? (
+            <Flex justifyContent={"center"} mt="20px"><Spinner size='lg' color="var(--theme-color)" /></Flex>
+          ) : (
+            permission?.map((data, index) => (
+              <Table.Row key={index}>
                 <Table.Cell p={"15px"}>{index + 1}</Table.Cell>
                 <Table.Cell p={"15px"}>{data?.description}</Table.Cell>
                 <Table.Cell p={"15px"}>{typeof data.module_id === "object" ? data.module_id.name : "-"}</Table.Cell>
                 <Table.Cell p={"15px"}>
-                  <Flex gap="10px" alignItems="center">
-                    <FaEdit size={22} color="var(--theme-color)" cursor="pointer" onClick={() => handleEditPermission(data?._id)} />
                     <MdDelete size={22} color="red" cursor="pointer" />
-                  </Flex>
                 </Table.Cell>
               </Table.Row>
-            </Table.Body>
-          )
-        })}
+            ))
+          )}
+        </Table.Body>
       </Table.Root>
-      {/* {permission?.map((data, index) => {
-        return (
-          <Box key={index} p="15px" mt="15px" boxShadow="var(--box-shadowMain)" bgColor="#fff" borderRadius="10px">
-            <HStack alignItems="center">
-              <Flex gap="50px" w="15%">
-                <Checkbox.Root colorPalette="purple">
-                  <Checkbox.HiddenInput />
-                  <Checkbox.Control />
-                </Checkbox.Root>
-                <Text fontSize="14px" fontWeight={400} color="#000">
-                  {index + 1}
-                </Text>
-              </Flex>
-              <Flex justifyContent="space-between" w="100%">
-                <Flex alignItems={"center"}  gap={"50px"}>
-                  <Box display="flex" gap="10px" alignItems="center">
-                    <GoFileSubmodule size={24} color="var(--theme-color)" />
-                    <Text fontSize="14px" fontWeight={500} color="#000">
-                      {data?.description}
-                    </Text>
-                  </Box>
-                  <Box display="flex" gap="10px" alignItems="center">
-                    <GoFileSubmodule size={24} color="var(--theme-color)" />
-                    <Text fontSize="14px" fontWeight={500} color="#000">
-                      {typeof data.module_id === "object" ? data.module_id.name : "-"}
-                    </Text>
-                  </Box>
-                </Flex>
-                <Flex gap="10px" alignItems="center">
-                  <FaEdit size={22} color="var(--theme-color)" cursor="pointer" onClick={() => handleEditPermission(data?._id)} />
+      {/* <Table.Root mt="15px" boxShadow="var(--box-shadowMain)" size="lg" borderRadius={"10px"} overflow={"hidden"}>
+        <Table.Header>
+          <Table.Row bgColor={"var(--theme-color)"}>
+            <Table.ColumnHeader p={"15px"} color={"#fff"}>No#</Table.ColumnHeader>
+            <Table.ColumnHeader p={"15px"} color={"#fff"}>Permissions</Table.ColumnHeader>
+            <Table.ColumnHeader p={"15px"} color={"#fff"}>Modules</Table.ColumnHeader>
+            <Table.ColumnHeader p={"15px"} color={"#fff"}>Actions</Table.ColumnHeader>
+          </Table.Row>
+        </Table.Header>
+        <Table.Body>
+          {isLoading ? (
+            <Flex justifyContent={"center"} mt="20px"><Spinner size='lg' color="var(--theme-color)" /></Flex>
+          ) : (
+            permission?.map((data, index) => (
+              <Table.Row key={index}>
+                <Table.Cell p={"15px"}>{index + 1}</Table.Cell>
+                <Table.Cell p={"15px"}>{data?.description}</Table.Cell>
+                <Table.Cell p={"15px"}>{typeof data.module_id === "object" ? data.module_id.name : "-"}</Table.Cell>
+                <Table.Cell p={"15px"}>
                   <MdDelete size={22} color="red" cursor="pointer" />
-                </Flex>
-              </Flex>
-            </HStack>
-          </Box>
-        )
-      })} */}
+                </Table.Cell>
+              </Table.Row>
+            ))
+          )}
+        </Table.Body>
+      </Table.Root> */}
     </Layout>
   )
 }
