@@ -12,8 +12,8 @@ const Header = () => {
     const router = useRouter();
 
     const handleLogout = async () => {
-        const res = await axios.post("/api/auth/logout");
-        router.push("/");
+        await axios.get("/api/auth/logout");
+        router.push("/login");
     };
 
     return (

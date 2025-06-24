@@ -1,7 +1,11 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 
-export const POST = async (req: NextRequest) => {
-    const res = NextResponse.json({ message: "Logged out successfully" });
-    res.cookies.set("token", "", { httpOnly: true, secure: process.env.NODE_ENV === "production", maxAge: -1 });
-    return res;
+export const GET = async () => {
+  const res = NextResponse.json({ message: "Logged out successfully" });
+  res.cookies.set("session_user", "", {
+    httpOnly: true,
+    path: "/",
+    expires: new Date(0),
+  });
+  return res;
 };

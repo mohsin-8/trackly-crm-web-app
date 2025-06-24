@@ -1,13 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
+import mongoose from "mongoose";
 import { Permissions } from "@/lib/models/Permissions/Permissions";
 import { ModModule } from "@/lib/models/ModModel/ModModel";
 import { connectDB } from "@/lib/db";
-import mongoose from "mongoose";
+import { getAuthUser } from "@/lib/auth/getAuthUser";
 
 export const POST = async (req: NextRequest) => {
     await connectDB();
 
     try {
+        const user = await getAuthUser();
+        if (!user) {
+            return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+        }
+
         const { module_id, description } = await req.json();
 
         if (!mongoose.Types.ObjectId.isValid(module_id)) {
@@ -35,6 +41,11 @@ export const GET = async (req: NextRequest) => {
     await connectDB();
 
     try {
+        const user = await getAuthUser();
+        if (!user) {
+            return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+        }
+
         const allPermissions = await Permissions.find().populate("module_id");
 
         return NextResponse.json(allPermissions, { status: 200 });

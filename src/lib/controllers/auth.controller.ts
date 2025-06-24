@@ -1,4 +1,3 @@
-import { PasswordResetToken } from "../models/User/PasswordResetToken.model"
 import { User } from "../models/User/User"
 import bcrypt from "bcryptjs"
 

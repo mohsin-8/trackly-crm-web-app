@@ -10,8 +10,6 @@ import { Permission } from '@/lib/types/permissions';
 import { getPermissions } from '@/lib/services/permissionsApiCalls';
 
 const Permissions = () => {
-  if (typeof window === 'undefined') return null;
-
   const queryClient = useQueryClient();
 
   const { data: permission, isLoading } = useQuery<Permission[]>({
@@ -50,33 +48,13 @@ const Permissions = () => {
         {/* Correct the structure here */}
         <Table.Body>
           {isLoading ? (
-            <Flex justifyContent={"center"} mt="20px"><Spinner size='lg' color="var(--theme-color)" /></Flex>
-          ) : (
-            permission?.map((data, index) => (
-              <Table.Row key={index}>
-                <Table.Cell p={"15px"}>{index + 1}</Table.Cell>
-                <Table.Cell p={"15px"}>{data?.description}</Table.Cell>
-                <Table.Cell p={"15px"}>{typeof data.module_id === "object" ? data.module_id.name : "-"}</Table.Cell>
-                <Table.Cell p={"15px"}>
-                    <MdDelete size={22} color="red" cursor="pointer" />
-                </Table.Cell>
-              </Table.Row>
-            ))
-          )}
-        </Table.Body>
-      </Table.Root>
-      {/* <Table.Root mt="15px" boxShadow="var(--box-shadowMain)" size="lg" borderRadius={"10px"} overflow={"hidden"}>
-        <Table.Header>
-          <Table.Row bgColor={"var(--theme-color)"}>
-            <Table.ColumnHeader p={"15px"} color={"#fff"}>No#</Table.ColumnHeader>
-            <Table.ColumnHeader p={"15px"} color={"#fff"}>Permissions</Table.ColumnHeader>
-            <Table.ColumnHeader p={"15px"} color={"#fff"}>Modules</Table.ColumnHeader>
-            <Table.ColumnHeader p={"15px"} color={"#fff"}>Actions</Table.ColumnHeader>
-          </Table.Row>
-        </Table.Header>
-        <Table.Body>
-          {isLoading ? (
-            <Flex justifyContent={"center"} mt="20px"><Spinner size='lg' color="var(--theme-color)" /></Flex>
+            <Table.Row>
+              <Table.Cell colSpan={4}>
+                <Flex justifyContent="center" alignItems="center" p={4}>
+                  <Spinner size='lg' color="var(--theme-color)" />
+                </Flex>
+              </Table.Cell>
+            </Table.Row>
           ) : (
             permission?.map((data, index) => (
               <Table.Row key={index}>
@@ -90,7 +68,7 @@ const Permissions = () => {
             ))
           )}
         </Table.Body>
-      </Table.Root> */}
+      </Table.Root>
     </Layout>
   )
 }
