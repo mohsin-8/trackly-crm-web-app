@@ -5,9 +5,10 @@ import { Box, Checkbox, Flex, HStack, Link, Spinner, Table, Text } from '@chakra
 import { FaFingerprint, FaPlus } from 'react-icons/fa';
 import Layout from '@/components/Layout/Layout';
 import { MdDelete } from 'react-icons/md';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Permission } from '@/lib/types/permissions';
-import { getPermissions } from '@/lib/services/permissionsApiCalls';
+import { getPermissions, deletePermissions } from '@/lib/services/permissionsApiCalls';
+import { toaster } from '@/components/ui/toaster';
 
 const Permissions = () => {
   const queryClient = useQueryClient();
@@ -15,6 +16,18 @@ const Permissions = () => {
   const { data: permission, isLoading } = useQuery<Permission[]>({
     queryKey: ['permissions'],
     queryFn: getPermissions,
+  });
+
+  const { mutate: handleDeletePersmission } = useMutation({
+    mutationFn: deletePermissions,
+    onSuccess: () => {
+      toaster.create({
+        title: "Permission is deleted successfully",
+        duration: 3000,
+        type: "success",
+      });
+      queryClient.invalidateQueries({ queryKey: ['permissions'] });
+    }
   });
 
   return (
@@ -31,7 +44,7 @@ const Permissions = () => {
               <Checkbox.Control />
               <Checkbox.Label>Select All</Checkbox.Label>
             </Checkbox.Root>
-            <Link href='/settings/modules/create' bgColor={"var(--theme-color)"} textDecor={"none"} color={"#fff"} p="10px" borderRadius={"8px"} as={NextLink}><FaPlus color='#fff' /> Create Permission</Link>
+            <Link href='/settings/permissions/create' bgColor={"var(--theme-color)"} textDecor={"none"} color={"#fff"} p="10px" borderRadius={"8px"} as={NextLink}><FaPlus color='#fff' /> Create Permission</Link>
           </Flex>
         </HStack>
       </Box>
@@ -45,7 +58,6 @@ const Permissions = () => {
           </Table.Row>
         </Table.Header>
 
-        {/* Correct the structure here */}
         <Table.Body>
           {isLoading ? (
             <Table.Row>
@@ -62,7 +74,7 @@ const Permissions = () => {
                 <Table.Cell p={"15px"}>{data?.description}</Table.Cell>
                 <Table.Cell p={"15px"}>{typeof data.module_id === "object" ? data.module_id.name : "-"}</Table.Cell>
                 <Table.Cell p={"15px"}>
-                  <MdDelete size={22} color="red" cursor="pointer" />
+                  <MdDelete size={22} color="red" cursor="pointer" onClick={() => handleDeletePersmission(data._id)} />
                 </Table.Cell>
               </Table.Row>
             ))

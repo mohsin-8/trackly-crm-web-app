@@ -25,6 +25,14 @@ export const POST = async (req: NextRequest) => {
             return NextResponse.json({ message: "Module not found" }, { status: 404 });
         }
 
+        const existingPermission = await Permissions.findOne({ module_id, description });
+        if (existingPermission) {
+            return NextResponse.json(
+                { message: "This description is already saved under this module." },
+                { status: 409 }
+            );
+        }
+
         const newPermission = await Permissions.create({ module_id, description });
 
         return NextResponse.json(

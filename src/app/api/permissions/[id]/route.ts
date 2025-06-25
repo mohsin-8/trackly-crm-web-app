@@ -1,35 +1,41 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Permissions } from "@/lib/models/Permissions/Permissions";
 import { connectDB } from "@/lib/db";
+import { getAuthUser } from "@/lib/auth/getAuthUser";
 import mongoose from "mongoose";
 
 export const PUT = async (req: NextRequest, { params }: { params: { id: string } }) => {
-    await connectDB();
+  await connectDB();
 
-    try {
-        const { id } = params;
-        const { module_id, description } = await req.json();
+  try {
+    const { id } = params;
+    const user = await getAuthUser();
+    const { module_id, description } = await req.json();
 
-        if (!module_id || !description) {
-            return NextResponse.json({ message: "module_id and description are required" }, { status: 400 });
-        }
-
-        const data = {
-            module_id,
-            description
-        };
-
-        const updatePermissionById = await Permissions.findByIdAndUpdate(id, data, { new: true });
-
-        if (!updatePermissionById) {
-            return NextResponse.json({ message: "Permission not found" }, { status: 404 });
-        }
-
-        return NextResponse.json({ message: "Permission is updated successfully" });
-    } catch (error) {
-        console.error("PUT /permissions error:", error);
-        return NextResponse.json({ message: "Server error" }, { status: 500 });
+    if (!user) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
+
+    if (!module_id || !description) {
+      return NextResponse.json({ message: "module_id and description are required" }, { status: 400 });
+    }
+
+    const data = {
+      module_id,
+      description
+    };
+
+    const updatePermissionById = await Permissions.findByIdAndUpdate(id, data, { new: true });
+
+    if (!updatePermissionById) {
+      return NextResponse.json({ message: "Permission not found" }, { status: 404 });
+    }
+
+    return NextResponse.json({ message: "Permission is updated successfully" });
+  } catch (error) {
+    console.error("PUT /permissions error:", error);
+    return NextResponse.json({ message: "Server error" }, { status: 500 });
+  }
 };
 
 export const GET = async (req: NextRequest, { params }: { params: { id: string } }) => {
@@ -37,7 +43,11 @@ export const GET = async (req: NextRequest, { params }: { params: { id: string }
 
   try {
     const { id } = params;
-    
+    const user = await getAuthUser();
+    if (!user) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
+
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return NextResponse.json({ message: "Invalid permission ID" }, { status: 400 });
     }
@@ -60,7 +70,11 @@ export const DELETE = async (req: NextRequest, { params }: { params: { id: strin
 
   try {
     const { id } = params;
-
+    const user = await getAuthUser();
+    if (!user) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
+    
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return NextResponse.json({ message: "Invalid permission ID" }, { status: 400 });
     }

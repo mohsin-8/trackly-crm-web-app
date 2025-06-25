@@ -1,11 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
 import { ModModule } from "@/lib/models/ModModel/ModModel";
 import { connectDB } from "@/lib/db";
+import { getAuthUser } from "@/lib/auth/getAuthUser";
 
 export const POST = async (req: NextRequest) => {
     await connectDB();
     try {
         const { name } = await req.json();
+        const user = await getAuthUser();
+        if (!user) {
+            return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+        }
 
         const modModule = new ModModule({ name });
 
@@ -20,6 +25,11 @@ export const POST = async (req: NextRequest) => {
 export const GET = async (req: NextRequest) => {
     await connectDB();
     try {
+        const user = await getAuthUser();
+        if (!user) {
+            return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+        }
+        
         const allModules = await ModModule.find();
 
         return NextResponse.json(allModules);
