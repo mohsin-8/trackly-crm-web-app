@@ -1,12 +1,10 @@
 import React from 'react';
 import Layout from '@/components/Layout/Layout';
-import EditOrCreatePermission from '@/components/EditOrCreatePermission/EditOrCreatePermission';
 
-const PermissionsEdit = async ({ params }: { params: { id: string } }) => {
-  const { id } = await params;
+const PermissionsEdit = async () => {
   return (
     <Layout>
-      <EditOrCreatePermission id={id} />
+      EDIT
     </Layout>
   )
 }
